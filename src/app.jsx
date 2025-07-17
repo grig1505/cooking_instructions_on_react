@@ -1,12 +1,49 @@
 import styles from './app.module.css';
+import { useEffect, useState } from 'react';
 import data from './data.json';
 
 export const App = () => {
 	// Можно задать 2 состояния — steps и activeIndex
+	// Используйте хук useState
+	const [steps, setSteps] = useState([]);
+	const [activeIndex, setActiveIndex] = useState(0);
+	const [isFirstStep, setIsFirstStep] = useState(true);
+	const [isLastStep, setIsLastStep] = useState(false);
 
+	// Используйте хук useEffect, чтобы получить активный шаг
+	useEffect(() => {
+		setSteps(data);
+	}, []);
+
+	// Используйте хук useEffect, чтобы получить активный шаг
+	useEffect(() => {
+		if (activeIndex === 0) {
+			setIsFirstStep(true);
+			setIsLastStep(false);
+		} else if (activeIndex === steps.length - 1) {
+			setIsFirstStep(false);
+			setIsLastStep(true);
+		} else {
+			setIsFirstStep(false);
+			setIsLastStep(false);
+		}
+	}, [activeIndex]);
+
+	// Используйте хук useEffect, чтобы получить активный шаг
+	useEffect(() => {
+		setActiveIndex(0);
+	}, []);
 	// И определить 3 обработчика: Клик назад, Клик вперед, Начать сначала
+	function handleClick() {
+		setActiveIndex(0);
+	}
 
-	// И 2 переменных-флага — находимся ли мы на первом шаге, и находимся ли на последнем
+	function handleClickNext() {
+		setActiveIndex(activeIndex + 1);
+	}
+	function handleClickBack() {
+		setActiveIndex(activeIndex - 1);
+	}
 
 	return (
 		<div className={styles.container}>
