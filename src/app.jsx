@@ -5,22 +5,11 @@ import data from './data.json';
 export const App = () => {
 	const [steps, setSteps] = useState([]);
 	const [activeIndex, setActiveIndex] = useState(1);
-	const [isFirstStep, setIsFirstStep] = useState(true);
-	const [isLastStep, setIsLastStep] = useState(false);
-
-	useEffect(() => {
+    const isFirstStep = activeIndex === 0;
+	const isLastStep = activeIndex === steps.length - 1;
+ 	useEffect(() => {
 		setSteps(data);
-		if (activeIndex +1 === 1) {
-			setIsFirstStep(true);
-			setIsLastStep(false);
-		} else if (activeIndex === steps.length - 1) {
-			setIsFirstStep(false);
-			setIsLastStep(true);
-		} else {
-			setIsFirstStep(false);
-			setIsLastStep(false);
-		}
-	}, [activeIndex]);
+	}, []);
 
 	useEffect(() => {
 		setActiveIndex(0);
@@ -33,7 +22,7 @@ export const App = () => {
 	function handleClickNext() {
 		setActiveIndex(activeIndex + 1);
 	}
-	function handleClickBackOnOneStep() {
+	function resetToStart() {
 		setActiveIndex(0);
 	}
 	function handleClickBack() {
@@ -48,7 +37,7 @@ export const App = () => {
 					<div className={styles['steps-content']}>
 						{steps.map((item, index) => (
 						<div key={index}>
-						{Number(index) === Number(activeIndex) ? item.content : null}
+						{index === activeIndex ? item.content : null}
 						</div>
 						))}
 					</div>
@@ -84,7 +73,7 @@ export const App = () => {
 						Далее
 					</button>
 					<button
-						onClick={handleClickBackOnOneStep}
+						onClick={resetToStart}
 						className={styles.button}
 						disabled={isFirstStep}
 						style={{ display: isLastStep ? 'inline-block' : 'none' }}
